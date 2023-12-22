@@ -58,7 +58,7 @@ jobs:
           curl -o work/base_Quest_9.jpg https://namanonamako.github.io/poster_test/base_Quest_9.jpg
           curl -o work/base_Quest_10.jpg https://namanonamako.github.io/poster_test/base_Quest_10.jpg
           curl -o work/base_Quest_11.jpg https://namanonamako.github.io/poster_test/base_Quest_11.jpg
-          curl -o images/posterData.json http://keisotsuna.servebeer.com:9000/posterData.json
+          curl -o work/posterData.json http://keisotsuna.servebeer.com:9000/posterData.json
       - name: start action...
         run: >
           node app.js
