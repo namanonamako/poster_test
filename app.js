@@ -106,7 +106,6 @@ const MAX_TWEETPIC_NUM = 12;
  * @param {any} datas
  */
 async function create_basepic(platform_name, datas) {
-    const { pipeline } = require('node:stream/promises');
     var pic_count = 0;
     const world_id_array = [];
     console.log(datas);
@@ -126,7 +125,8 @@ async function create_basepic(platform_name, datas) {
         }
     };
     console.log(world_id_array);
-
+    const key = `${platform_name}WorldID`;
+    json_data[key] = world_id_array;
     // 前回更新分から足りない画像を移動
     const results = [];
     let moved_count = 0;
@@ -157,6 +157,36 @@ async function create_basepic(platform_name, datas) {
     await Promise.all(results);
 }
 
+var json_data = {};
+
+/** ポスターから参照する情報を保持したJsonの作成 */
+
+async function create_poster_info_json() {
+    const old_json_file_path = "work/posterInfo.json";
+    const json_file_path = "images/posterInfo.json";
+
+
+    var pc_world_ids_fixed = json_data["PCWorldID"];
+    var quest_world_ids_fixed = json_data["QuestWorldID"];
+
+    // 前回処理分の読み込み
+    if (fs.existsSync(json_file_path)) {
+        const content = await fs.readFileSync(old_json_file_path, (err) => err && console.error(err));
+        const infos = JSON.parse(content);
+        pc_world_ids_fixed = pc_world_ids_fixed.concat(infos.PCWorldID).slice(0, MAX_TWEETPIC_NUM);
+        quest_world_ids_fixed = quest_world_ids_fixed.concat(infos.QuestWorldID).slice(0, MAX_TWEETPIC_NUM);
+    }
+
+    // 要素数を調整
+    json_data["PCWorldID"] = Array.from({ length: MAX_TWEETPIC_NUM }, (value, index) => pc_world_ids_fixed[index] || "");
+    json_data["QuestWorldID"] = Array.from({ length: MAX_TWEETPIC_NUM }, (value, index) => quest_world_ids_fixed[index] || "");
+
+    json_data["ver"] = "v1.0";
+    json_data["message"] = "Tweetを30分毎に取得します\n<color=blue>#VRChat_world紹介</color>\n<color=green>#VRChat_quest_world</color>";
+    const payload = JSON.stringify(json_data);
+    await fs.writeFile(json_file_path, payload, (err) => err && console.error(err));
+}
+
 async function main() {
     const sorce_json_file_path = "work/posterData.json";
 
@@ -171,6 +201,7 @@ async function main() {
     await create_merged_picture("PC", 1);
     await create_merged_picture("Quest", 0);
     await create_merged_picture("Quest", 1);
+    create_poster_info_json();
 }
 // #regiton test
 
