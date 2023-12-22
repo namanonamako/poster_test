@@ -211,7 +211,8 @@ async function main() {
     await create_merged_picture("PC", 1);
     await create_merged_picture("Quest", 0);
     await create_merged_picture("Quest", 1);
-    create_poster_info_json();
+    await create_poster_info_json();
+    console.log("処理完了");
 }
 // #regiton test
 
