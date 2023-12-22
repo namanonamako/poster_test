@@ -170,8 +170,10 @@ async function create_poster_info_json() {
     var pc_world_ids_fixed = json_data["PCWorldID"];
     var quest_world_ids_fixed = json_data["QuestWorldID"];
 
+    console.log(fs.existsSync(old_json_file_path));
     // 前回処理分の読み込み
     if (fs.existsSync(old_json_file_path)) {
+        console.log("Read");
         const content = await fs.readFileSync(old_json_file_path, (err) => err && console.error(err));
         const infos = JSON.parse(content);
         console.log(infos);
