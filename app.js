@@ -84,6 +84,7 @@ async function screenshot_tweet_pic(tweetUrl, path) {
             const iframeHandle = await page.waitForSelector('#twitter-widget-0');
             const frame = await iframeHandle.contentFrame();
             await frame.waitForNavigation({ waitUntil: 'networkidle0' });
+            await page.waitForTimeout(3000);
             console.log(`フレームの描画が完了しました。`);
 
             await page.setViewport({ width: Math.ceil(550), height: Math.ceil(800) });
