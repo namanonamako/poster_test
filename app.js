@@ -174,8 +174,15 @@ async function create_poster_info_json() {
     if (fs.existsSync(old_json_file_path)) {
         const content = await fs.readFileSync(old_json_file_path, (err) => err && console.error(err));
         const infos = JSON.parse(content);
+        console.log(infos);
+        console.log(infos.PCWorldID);
+        console.log(infos.QuestWorldID);
+        console.log(pc_world_ids_fixed);
+        console.log(quest_world_ids_fixed);
         pc_world_ids_fixed = pc_world_ids_fixed.concat(infos.PCWorldID).slice(0, MAX_TWEETPIC_NUM);
         quest_world_ids_fixed = quest_world_ids_fixed.concat(infos.QuestWorldID).slice(0, MAX_TWEETPIC_NUM);
+        console.log(pc_world_ids_fixed);
+        console.log(quest_world_ids_fixed);
     }
 
     // 要素数を調整
